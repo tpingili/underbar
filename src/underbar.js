@@ -80,12 +80,22 @@ var _ = {};
 
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
+    var resultArray = [];
+    //if no extra arguments are given, testResult is set to true, else false. A tweak for using it in reject
+    var testResult = (arguments[2] === undefined)? true: false;
+    //pushing all the elements(into a new array) where the test returns a value equal to testResult
+    _.each(collection, function(item){
+      if(test(item) === testResult)
+        resultArray.push(item);
+    });
+    return resultArray;
   };
 
   // Return all elements of an array that don't pass a truth test.
   _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
+    return _.filter(collection, test, false);
   };
 
   // Produce a duplicate-free version of the array.
