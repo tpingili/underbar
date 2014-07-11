@@ -169,6 +169,22 @@ var _ = {};
   //     return total + number;
   //   }, 0); // should be 6
   _.reduce = function(collection, iterator, accumulator) {
+    //if accumulator is not explicitly passed in for the initialValue
+    //the first element is chosen if the collection is an array
+    //the first key's value is chosen if the collection is an object
+    var initialValue = (accumulator === undefined)?
+                       (Array.isArray(collection)? collection[0] :
+                        collection[Object.keys(collection)[0]]) : accumulator;
+    var previousValue = initialValue;
+    if(Array.isArray(collection)){
+      for(var i = 0; i < collection.length;i++)
+        previousValue = iterator(previousValue, collection[i]);
+    }
+    else{
+      for(var key in collection)
+        previousValue = iterator(previousValue, collection[key]);
+    }
+    return previousValue;
   };
 
   // Determine if the array or object contains a given value (using `===`).
