@@ -154,18 +154,16 @@ var _ = {};
   // Note: you will nead to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
     //checking whether function passed is a function or a string
-    /*var funcOrString = typeof functionOrKey;
-    var resultsArray =[]
+    var func = typeof functionOrKey;
+    var resultArray =[];
     //if it is a function, apply it on each element and push it to an array
-    if(funcOrString === 'function')
-    {
-      for(var i = 0; i<collection.length; i++)
-
+    if (func === 'function'){
+      for(var i = 0; i < collection.length; i++)
+        resultArray.push( functionOrKey.apply(collection[i]) );  
     }
     //else extract the function name from the string and apply it on each element and push it to an array
-    else{
-      
-    }*/
+    //else{ }
+    return resultArray;
   };
 
   // Reduces an array or object to a single value by repetitively calling
@@ -337,6 +335,8 @@ var _ = {};
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var args = Array.prototype.slice.call(arguments, 2);
+    setTimeout(function(){func.apply(this,args)}, wait);
   };
 
 
