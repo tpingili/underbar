@@ -153,16 +153,18 @@ var _ = {};
   // Calls the method named by methodName on each value in the list.
   // Note: you will nead to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
-    //checking whether function passed is a function or a string
-    var func = typeof functionOrKey;
     var resultArray =[];
-    //if it is a function, apply it on each element and push it to an array
-    if (func === 'function'){
+    //if functionOrKey is a function, apply it on each element and push it to an array
+    if (typeof functionOrKey === 'function'){
       for(var i = 0; i < collection.length; i++)
         resultArray.push( functionOrKey.apply(collection[i]) );  
     }
     //else extract the function name from the string and apply it on each element and push it to an array
-    //else{ }
+    else{
+      var funcName = String.prototype.split.apply(functionOrKey);
+      for(var i = 0; i < collection.length; i++)
+        resultArray.push(collection[i][funcName].apply(collection[i]));
+    }
     return resultArray;
   };
 
