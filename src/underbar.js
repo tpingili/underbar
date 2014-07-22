@@ -124,12 +124,6 @@ var _ = {};
     return result;
   };
 
-  /*
-   * TIP: map is really handy when you want to transform an array of
-   * values into a new array of values. _.pluck() is solved for you
-   * as an example of this.
-   */
-
   // Takes an array of objects and returns and array of the values of
   // a certain property in it. E.g. take an array of people and return
   // an array of just their ages
@@ -145,6 +139,14 @@ var _ = {};
   // Calls the method named by methodName on each value in the list.
   // Note: you will nead to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
+    //iterate through collection
+    return _.map(collection, function(value){
+      if(typeof functionOrKey === 'function'){
+        return functionOrKey.apply(value, args);
+      }else{
+        return value[functionOrKey].apply(value, args);
+      }
+    });
   };
 
   // Reduces an array or object to a single value by repetitively calling
@@ -159,8 +161,15 @@ var _ = {};
   //   var numbers = [1,2,3];
   //   var sum = _.reduce(numbers, function(total, number){
   //     return total + number;
-  //   }, 0); // should be 6
+  //   },0); // should be 6
   _.reduce = function(collection, iterator, accumulator) {
+    accumulator = accumulator === undefined ? collection[0] : accumulator;
+    _.each(collection, function(value){
+      accumulator = iterator(accumulator, value);
+    })
+
+    return accumulator;
+
   };
 
   // Determine if the array or object contains a given value (using `===`).
@@ -178,13 +187,35 @@ var _ = {};
 
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
-    // TIP: Try re-using reduce() here.
+    if(iterator === undefined){
+        iterator = _.identity;
+    }
+
+    return _.reduce(collection, function(hasPassed, value){
+      if(!hasPassed){
+        return false;
+      }
+
+      if(iterator(value))
+        return true;
+
+      return false;
+
+    }, true)
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
-    // TIP: There's a very clever way to re-use every() here.
+    iterator = iterator === undefined ? _.identity : iterator;
+
+    return !_.every(collection, function(value){
+      if(iterator(value)){
+        return false;
+      }
+
+      return true;
+    })
   };
 
 
