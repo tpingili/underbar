@@ -40,6 +40,7 @@ var _ = {};
   // last element.
   _.last = function(array, n) {
     return n === undefined ? array[array.length-1]: n > 0? array.slice(-n) : [];
+    //return n === undefined ? array[array.length-1]: array.slice(Math.max(0, array.length-n));
   };
 
   // Call iterator(value, key, collection) for each element of collection.
@@ -52,9 +53,8 @@ var _ = {};
     if(Array.isArray(collection)){
       //iterate through the array and call the iterator for each element
       for(var i = 0; i < collection.length; i++)
-        iterator(collection[i], i, collection);
-    }
-    else{
+        iterator(collection[i], i , collection);
+    }else{
       //collection is an object. call the iterator on each value that the keys hold
       for(var key in collection)
         iterator(collection[key], key , collection);
@@ -328,6 +328,14 @@ var _ = {};
       }
       return myObj[key];
     };
+    return function(){
+      var arg = JSON.stringify(arguments);
+      if(results[arg] === undefined){
+        results[arg] = func.apply(null, arguments);
+      }
+      return results[arg];
+    }
+
   };
 
   // Delays a function for the given number of milliseconds, and then calls
